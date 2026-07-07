@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discord · Stxrfallz Void</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #010002;
+            color: #f0ecff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        /* Stars background */
+        #stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: twinkle 4s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.5); }
+        }
+
+        /* Glow Rings */
+        .glow-ring {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .ring-violet {
+            top: -10%; left: -10%;
+            width: 60%; height: 60%;
+            background: radial-gradient(circle, rgba(60,10,100,0.08) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite alternate;
+        }
+        .ring-crimson {
+            bottom: -10%; right: -10%;
+            width: 50%; height: 50%;
+            background: radial-gradient(circle, rgba(139,0,21,0.06) 0%, transparent 70%);
+            animation: float 25s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes float {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(30px,20px) scale(1.2); }
+        }
+
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            width: 100%;
+            background: rgba(10,0,20,0.45);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(204,0,51,0.08);
+            border-radius: 32px;
+            padding: 40px 36px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+            transition: all 0.4s ease;
+        }
+        .card:hover {
+            border-color: rgba(204,0,51,0.15);
+        }
+
+        /* Back link */
+        .nav-back {
+            margin-bottom: 24px;
+        }
+        .nav-back a {
+            color: rgba(106,90,133,0.5);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-back a:hover { color: #cc0033; }
+
+        /* Title */
+        .title {
+            font-family: 'Alex Brush', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            background: linear-gradient(135deg, #ffffff 0%, #cc0033 60%, #1a0033 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: rgba(106,90,133,0.6);
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+        }
+
+        /* Divider */
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(204,0,51,0.2), rgba(204,0,51,0.6));
+            margin: 20px 0 28px;
+        }
+
+        /* Info blocks */
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.3s ease;
+        }
+        .info-item:hover {
+            background: rgba(204,0,51,0.03);
+            border-color: rgba(204,0,51,0.05);
+        }
+        .info-item .icon {
+            font-size: 1.8rem;
+            color: rgba(204,0,51,0.4);
+            min-width: 40px;
+            text-align: center;
+        }
+        .info-item .content h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            font-size: 1.1rem;
+            color: rgba(240,236,255,0.8);
+            margin-bottom: 4px;
+        }
+        .info-item .content p {
+            font-weight: 300;
+            font-size: 0.9rem;
+            color: rgba(106,90,133,0.6);
+        }
+        .info-item .content a {
+            color: #cc0033;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+        .info-item .content a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Join button */
+        .join-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 32px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #1a0033 0%, #660011 100%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border: 1px solid rgba(204,0,51,0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(204,0,51,0.05);
+        }
+        .join-btn:hover {
+            transform: translateY(-3px);
+            border-color: #cc0033;
+            box-shadow: 0 0 50px rgba(204,0,51,0.15);
+            background: linear-gradient(135deg, #3d0a5e 0%, #8b0015 100%);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .card { padding: 28px 20px; }
+            .info-item { flex-direction: column; align-items: center; text-align: center; }
+            .info-item .icon { margin-bottom: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="stars"></div>
+    <div class="glow-ring ring-violet"></div>
+    <div class="glow-ring ring-crimson"></div>
+
+    <div class="card">
+        <div class="nav-back">
+            <a href="socials.html"><i class="fas fa-arrow-left"></i> back to alessandra</a>
+        </div>
+
+        <div class="title">Discord</div>
+        <div class="subtitle">— the voice of the void —</div>
+
+        <div class="divider"></div>
+
+        <!-- Server -->
+        <div class="info-item">
+            <div class="icon"><i class="fab fa-discord"></i></div>
+            <div class="content">
+                <h4>Stxrfallz Server</h4>
+                <p>Join the community. Stars, chaos, and crimson vibes.</p>
+                <a href="YOUR_DISCORD_INVITE_LINK" target="_blank">discord.gg/yourlink</a>
+            </div>
+        </div>
+
+        <!-- Bot -->
+        <div class="info-item">
+            <div class="icon"><i class="fas fa-robot"></i></div>
+            <div class="content">
+                <h4>Stxrfallz Bot</h4>
+                <p>Your companion in the void. Music, moderation, and cosmic commands.</p>
+                <p><a href="YOUR_BOT_INVITE_LINK" target="_blank">Invite the bot</a> · <a href="YOUR_BOT_DASHBOARD" target="_blank">Dashboard</a></p>
+            </div>
+        </div>
+
+        <!-- App -->
+        <div class="info-item">
+            <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="content">
+                <h4>Stxrfallz App</h4>
+                <p>Track your constellation, connect with STXRZ, and unlock the void.</p>
+                <p><a href="YOUR_APP_STORE_LINK" target="_blank">Download</a> · <a href="YOUR_APP_WEBSITE" target="_blank">Learn more</a></p>
+            </div>
+        </div>
+
+        <!-- Join call -->
+        <div style="text-align: center; margin-top: 12px;">
+            <a href="YOUR_DISCORD_INVITE_LINK" target="_blank" class="join-btn"><i class="fab fa-discord" style="margin-right: 8px;"></i> Enter the Void</a>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            const container = document.getElementById('stars');
+            const count = 100;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (0.5 + Math.random() * 2) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = (Math.random() * 6) + 's';
+                star.style.animationDuration = (3 + Math.random() * 5) + 's';
+                container.appendChild(star);
+            }
+        })();
+    </script>
+</body>
+</html>

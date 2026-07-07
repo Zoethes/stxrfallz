@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stxrfallz · Void & Blood</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Parisienne&family=Alex+Brush&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* ===== RESET ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Outfit', sans-serif;
+            background: #010002;
+            color: #f0ecff;
+            user-select: none;
+        }
+
+        /* ===== CANVAS ===== */
+        #void-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            display: block;
+            background: #010002;
+        }
+
+        /* ===== UI OVERLAY ===== */
+        .ui-overlay {
+            position: fixed;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            top: 32px;
+            left: 0;
+            width: 100%;
+            padding: 0 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar .brand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            /* Violet to Crimson to Black Void */
+            background: linear-gradient(135deg, #1a0033 0%, #3d0a5e 40%, #660011 70%, #000000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            pointer-events: auto;
+            cursor: default;
+            text-shadow: 0 0 60px rgba(204, 0, 51, 0.08);
+        }
+
+        .top-bar .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+            pointer-events: auto;
+        }
+        .top-bar .nav-links a {
+            color: rgba(106, 90, 133, 0.6);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .top-bar .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #cc0033;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 12px rgba(204, 0, 51, 0.3);
+        }
+        .top-bar .nav-links a:hover {
+            color: #ffffff;
+        }
+        .top-bar .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .top-bar .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            pointer-events: auto;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .top-bar .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: #f0ecff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Bottom Info */
+        .bottom-info {
+            bottom: 32px;
+            left: 0;
+            width: 100%;
+            padding: 0 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-info .tagline {
+            font-weight: 300;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(106, 90, 133, 0.4);
+            pointer-events: auto;
+        }
+        .bottom-info .tagline i {
+            color: #cc0033;
+            margin-right: 8px;
+            font-size: 0.45rem;
+        }
+
+        .bottom-info .socials {
+            display: flex;
+            gap: 20px;
+            pointer-events: auto;
+        }
+        .bottom-info .socials a {
+            color: rgba(106, 90, 133, 0.4);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .bottom-info .socials a:hover {
+            color: #cc0033;
+            transform: translateY(-2px);
+            text-shadow: 0 0 20px rgba(204, 0, 51, 0.15);
+        }
+
+        /* Star Hint */
+        .star-hint {
+            position: fixed;
+            bottom: 82px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            font-size: 0.5rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(106, 90, 133, 0.2);
+            font-weight: 300;
+            pointer-events: none;
+            animation: fadeHint 5s ease-in-out infinite;
+        }
+        @keyframes fadeHint {
+            0%,
+            100% {
+                opacity: 0.15;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Shooting Star Overlay */
+        #shooting-star-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            pointer-events: none;
+            background: #010002;
+            transition: opacity 1s ease;
+        }
+        #shooting-star-overlay.hidden {
+            opacity: 0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 720px) {
+            .top-bar {
+                padding: 0 24px;
+                top: 20px;
+            }
+            .top-bar .brand {
+                font-size: 1.5rem;
+            }
+            .top-bar .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(1, 0, 2, 0.92);
+                backdrop-filter: blur(20px);
+                padding: 24px 0 32px;
+                gap: 18px;
+                border-bottom: 1px solid rgba(204, 0, 51, 0.06);
+                align-items: center;
+            }
+            .top-bar .nav-links.open {
+                display: flex;
+            }
+            .top-bar .hamburger {
+                display: flex;
+            }
+
+            .bottom-info {
+                padding: 0 24px;
+                bottom: 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .bottom-info .tagline {
+                font-size: 0.45rem;
+            }
+            .bottom-info .socials {
+                gap: 14px;
+            }
+            .bottom-info .socials a {
+                font-size: 0.85rem;
+            }
+            .star-hint {
+                bottom: 70px;
+                font-size: 0.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SHOOTING STAR OVERLAY ===== -->
+    <div id="shooting-star-overlay"></div>
+
+    <!-- ===== CANVAS ===== -->
+    <canvas id="void-canvas"></canvas>
+
+    <!-- ===== UI OVERLAY ===== -->
+    <div class="ui-overlay top-bar">
+        <span class="brand">Stxrfallz</span>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="return false;">Origin</a></li>
+            <li><a href="#" onclick="return false;">Stxrz</a></li>
+            <li><a href="#" onclick="return false;">Drops</a></li>
+            <li><a href="#" onclick="return false;">Void</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+    <div class="ui-overlay bottom-info">
+        <span class="tagline"><i class="fas fa-circle"></i> The Original Alyxz · Void to Blood</span>
+        <div class="socials">
+            <a href="#" aria-label="instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="tiktok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" aria-label="youtube"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+
+    <div class="star-hint">✦ feel the void · touch the glow ✦</div>
+
+    <script>
+        // ================================================================
+        //  PURE GLOWING TEXT · S IN ALEX BRUSH · REST PARISIENNE
+        //  - "S" drawn with Alex Brush, "txrfallz" with Parisienne
+        //  - More background stars (clean & simplistic)
+        //  - Click ripple & shooting star intro
+        // ================================================================
+
+        (function() {
+            const canvas = document.getElementById('void-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let W, H;
+            let bgStars = [];
+            let mouse = { x: -9999, y: -9999, radius: 100 };
+            let clickWave = { active: false, x: 0, y: 0, radius: 0, maxRadius: 200, alpha: 1 };
+            let time = 0;
+
+            // ---- Resize ----
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                generateBgStars();
+            }
+            window.addEventListener('resize', resize);
+
+            // ---- Generate Background Stars (more but simplistic) ----
+            function generateBgStars() {
+                bgStars = [];
+                // More stars: ~200-280 for a richer galaxy
+                const count = Math.max(200, Math.min(280, Math.floor((W * H) / 6000)));
+                for (let i = 0; i < count; i++) {
+                    const size = 0.3 + Math.random() * 1.6;
+                    bgStars.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        r: size,
+                        baseR: size,
+                        alpha: 0.2 + Math.random() * 0.6,
+                        pulseSpeed: 0.002 + Math.random() * 0.01,
+                        pulseOffset: Math.random() * Math.PI * 2,
+                        hue: 260 + Math.random() * 30,
+                        sat: 30 + Math.random() * 30,
+                        light: 40 + Math.random() * 35,
+                        hovered: false,
+                    });
+                }
+            }
+
+            // ---- Shooting Star (Premium Intro) ----
+            function shootStar(callback) {
+                const overlay = document.getElementById('shooting-star-overlay');
+                const startX = Math.random() * W * 0.3;
+                const startY = Math.random() * H * 0.15;
+                const endX = W + 150;
+                const endY = H + 150;
+                const duration = 1400 + Math.random() * 400;
+                const startTime = performance.now();
+
+                const tailLength = 120;
+                const starSize = 5;
+
+                function animateShoot(time) {
+                    const elapsed = time - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = progress < 0.5 ?
+                        4 * progress * progress * progress :
+                        1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                    const cx = startX + (endX - startX) * eased;
+                    const cy = startY + (endY - startY) * eased;
+
+                    overlay.style.opacity = Math.max(0, 1 - progress * 1.2);
+
+                    ctx.save();
+
+                    // Tail
+                    for (let i = 0; i < tailLength; i++) {
+                        const t = i / tailLength;
+                        const px = cx - (endX - startX) * t * 0.012;
+                        const py = cy - (endY - startY) * t * 0.012;
+                        const alpha = 0.8 * (1 - t) * (1 - progress * 0.6);
+                        const size = starSize * (1 - t) * 1.3;
+                        ctx.beginPath();
+                        ctx.arc(px, py, size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 240, 255, ${alpha})`;
+                        ctx.shadowColor = 'rgba(204, 0, 51, 0.6)';
+                        ctx.shadowBlur = 35;
+                        ctx.fill();
+                    }
+
+                    // Head
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
+                    ctx.shadowBlur = 80;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, starSize * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+
+                    ctx.shadowBlur = 120;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, starSize * 0.8, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffccdd';
+                    ctx.fill();
+
+                    ctx.restore();
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateShoot);
+                    } else {
+                        overlay.classList.add('hidden');
+                        setTimeout(() => { overlay.style.display = 'none'; }, 400);
+                        if (callback) callback();
+                    }
+                }
+
+                overlay.style.display = 'block';
+                overlay.style.opacity = '1';
+                requestAnimationFrame(animateShoot);
+            }
+
+            // ---- Draw Glowing Text Logo (Split Fonts) ----
+            function drawGlowingText() {
+                const scale = Math.min(W, H) / 900;
+                const fontSize = Math.max(80, Math.min(280, 200 * scale));
+
+                // Gradient: dark violet → deep crimson
+                const grad = ctx.createLinearGradient(W * 0.2, 0, W * 0.8, 0);
+                grad.addColorStop(0, '#1a0033'); // dark violet
+                grad.addColorStop(0.4, '#3d0a5e');
+                grad.addColorStop(0.7, '#660011'); // deep crimson
+                grad.addColorStop(1, '#8b0015'); // blood crimson
+
+                // Center positioning
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                const centerX = W / 2;
+                const centerY = H / 2 - 8 * scale;
+
+                // Measure widths to align perfectly
+                const sFont = `${fontSize}px 'Alex Brush', cursive`;
+                const restFont = `${fontSize}px 'Parisienne', cursive`;
+
+                ctx.font = sFont;
+                const sWidth = ctx.measureText('S').width;
+                ctx.font = restFont;
+                const restWidth = ctx.measureText('txrfallz').width;
+                const totalWidth = sWidth + restWidth;
+                const startX = centerX - totalWidth / 2;
+
+                // ---- Draw 'S' (Alex Brush) ----
+                ctx.font = sFont;
+                ctx.shadowColor = '#cc0033';
+                ctx.shadowBlur = 90;
+                ctx.fillStyle = grad;
+                ctx.fillText('S', startX, centerY);
+
+                ctx.shadowBlur = 60;
+                ctx.shadowColor = 'rgba(204, 0, 51, 0.6)';
+                ctx.fillText('S', startX, centerY);
+
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.globalAlpha = 0.15;
+                ctx.fillText('S', startX, centerY);
+                ctx.globalAlpha = 1;
+
+                // ---- Draw 'txrfallz' (Parisienne) ----
+                ctx.font = restFont;
+                ctx.shadowColor = '#cc0033';
+                ctx.shadowBlur = 90;
+                ctx.fillStyle = grad;
+                ctx.fillText('txrfallz', startX + sWidth, centerY);
+
+                ctx.shadowBlur = 60;
+                ctx.shadowColor = 'rgba(204, 0, 51, 0.6)';
+                ctx.fillText('txrfallz', startX + sWidth, centerY);
+
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.globalAlpha = 0.15;
+                ctx.fillText('txrfallz', startX + sWidth, centerY);
+                ctx.globalAlpha = 1;
+
+                // Secondary violet glow for both
+                ctx.shadowBlur = 70;
+                ctx.shadowColor = 'rgba(60, 10, 100, 0.3)';
+                ctx.fillStyle = grad;
+                ctx.font = sFont;
+                ctx.fillText('S', startX, centerY);
+                ctx.font = restFont;
+                ctx.fillText('txrfallz', startX + sWidth, centerY);
+                ctx.shadowBlur = 0;
+            }
+
+            // ---- Background Nebula ----
+            function drawNebula() {
+                // Violet void glow
+                const grad1 = ctx.createRadialGradient(W * 0.2, H * 0.3, 0, W * 0.2, H * 0.3, W * 0.5);
+                grad1.addColorStop(0, 'rgba(40, 0, 80, 0.04)');
+                grad1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = grad1;
+                ctx.fillRect(0, 0, W, H);
+
+                // Crimson blood glow
+                const grad2 = ctx.createRadialGradient(W * 0.8, H * 0.7, 0, W * 0.8, H * 0.7, W * 0.4);
+                grad2.addColorStop(0, 'rgba(139, 0, 21, 0.03)');
+                grad2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = grad2;
+                ctx.fillRect(0, 0, W, H);
+            }
+
+            // ---- Main Draw Loop ----
+            function draw() {
+                time += 0.01;
+
+                // Deep void background
+                ctx.fillStyle = '#010002';
+                ctx.fillRect(0, 0, W, H);
+
+                // Nebula layers
+                drawNebula();
+
+                // ---- Draw Background Stars ----
+                for (const star of bgStars) {
+                    const pulse = 0.7 + 0.3 * Math.sin(time * star.pulseSpeed + star.pulseOffset);
+                    const currentR = star.baseR * (0.8 + 0.4 * pulse);
+                    const alpha = star.alpha * (0.7 + 0.3 * pulse);
+
+                    const dx = star.x - mouse.x;
+                    const dy = star.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    star.hovered = dist < mouse.radius;
+
+                    let sizeBoost = 1;
+                    if (star.hovered) sizeBoost = 2;
+                    const finalR = currentR * sizeBoost;
+
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, finalR, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${star.hue}, ${star.sat}%, ${star.light}%, ${alpha * 0.4})`;
+                    ctx.fill();
+                }
+
+                // ---- Draw Glowing Text Logo ----
+                drawGlowingText();
+
+                // ---- Click Ripple ----
+                if (clickWave.active) {
+                    clickWave.radius += 6;
+                    clickWave.alpha *= 0.965;
+                    if (clickWave.alpha < 0.01 || clickWave.radius > clickWave.maxRadius) {
+                        clickWave.active = false;
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(clickWave.x, clickWave.y, clickWave.radius, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(204, 0, 51, ${clickWave.alpha * 0.5})`;
+                        ctx.lineWidth = 1.8 * (1 - clickWave.radius / clickWave.maxRadius);
+                        ctx.shadowColor = `rgba(204, 0, 51, ${clickWave.alpha * 0.25})`;
+                        ctx.shadowBlur = 30;
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.arc(clickWave.x, clickWave.y, clickWave.radius * 0.5, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(160, 120, 220, ${clickWave.alpha * 0.35})`;
+                        ctx.lineWidth = 1 * (1 - clickWave.radius / clickWave.maxRadius);
+                        ctx.shadowColor = `rgba(160, 120, 220, ${clickWave.alpha * 0.15})`;
+                        ctx.shadowBlur = 20;
+                        ctx.stroke();
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                requestAnimationFrame(draw);
+            }
+
+            // ---- Interactivity ----
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                mouse.x = -9999;
+                mouse.y = -9999;
+            });
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const cx = e.clientX - rect.left;
+                const cy = e.clientY - rect.top;
+                clickWave.active = true;
+                clickWave.x = cx;
+                clickWave.y = cy;
+                clickWave.radius = 0;
+                clickWave.alpha = 1;
+            });
+
+            // ---- Touch Support ----
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = touch.clientX - rect.left;
+                mouse.y = touch.clientY - rect.top;
+                clickWave.active = true;
+                clickWave.x = mouse.x;
+                clickWave.y = mouse.y;
+                clickWave.radius = 0;
+                clickWave.alpha = 1;
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = touch.clientX - rect.left;
+                mouse.y = touch.clientY - rect.top;
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', () => {
+                mouse.x = -9999;
+                mouse.y = -9999;
+            });
+
+            // ---- Hamburger ----
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('open');
+                });
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('open');
+                    });
+                });
+            }
+
+            // ---- Init ----
+            resize();
+            setTimeout(() => {
+                shootStar(() => {
+                    draw();
+                });
+            }, 300);
+            draw();
+
+            // Resize handler
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    resize();
+                }, 200);
+            });
+
+            console.log('✦ Stxrfallz · The Original Alyxz · Void to Blood ✦');
+            console.log('✦ S in Alex Brush · Rest Parisienne · Dark Void ✦');
+        })();
+    </script>
+</body>
+</html>

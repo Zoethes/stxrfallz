@@ -174,6 +174,39 @@
             text-shadow: 0 0 20px rgba(204, 0, 51, 0.15);
         }
 
+        /* Special Discord Star */
+        .discord-star {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: rgba(106, 90, 133, 0.6);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(204, 0, 51, 0.2);
+            background: rgba(204, 0, 51, 0.03);
+            pointer-events: auto;
+        }
+        .discord-star i {
+            font-size: 1.2rem;
+            color: #cc0033;
+            transition: all 0.3s ease;
+        }
+        .discord-star:hover {
+            background: #cc0033;
+            color: #ffffff;
+            border-color: #cc0033;
+            box-shadow: 0 0 40px rgba(204, 0, 51, 0.3);
+            transform: scale(1.05);
+        }
+        .discord-star:hover i {
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
         /* Star Hint */
         .star-hint {
             position: fixed;
@@ -290,8 +323,10 @@
     </div>
 
     <div class="ui-overlay bottom-info">
+        <a href="socials.html" class="discord-star" style="border-color: rgba(204,0,51,0.3); background: rgba(204,0,51,0.05);"><i class="fas fa-star"></i> Meet Alessandra</a>
         <span class="tagline"><i class="fas fa-circle"></i> The Original Alyxz · Void to Blood</span>
         <div class="socials">
+            <a href="discord.html" class="discord-star"><i class="fab fa-discord"></i> Discord</a>
             <a href="#" aria-label="instagram"><i class="fab fa-instagram"></i></a>
             <a href="#" aria-label="twitter"><i class="fab fa-twitter"></i></a>
             <a href="#" aria-label="tiktok"><i class="fab fa-tiktok"></i></a>
@@ -304,9 +339,6 @@
     <script>
         // ================================================================
         //  PURE GLOWING TEXT · S IN ALEX BRUSH · REST PARISIENNE
-        //  - "S" drawn with Alex Brush, "txrfallz" with Parisienne
-        //  - More background stars (clean & simplistic)
-        //  - Click ripple & shooting star intro
         // ================================================================
 
         (function() {
@@ -319,7 +351,6 @@
             let clickWave = { active: false, x: 0, y: 0, radius: 0, maxRadius: 200, alpha: 1 };
             let time = 0;
 
-            // ---- Resize ----
             function resize() {
                 W = canvas.width = window.innerWidth;
                 H = canvas.height = window.innerHeight;
@@ -327,10 +358,8 @@
             }
             window.addEventListener('resize', resize);
 
-            // ---- Generate Background Stars (more but simplistic) ----
             function generateBgStars() {
                 bgStars = [];
-                // More stars: ~200-280 for a richer galaxy
                 const count = Math.max(200, Math.min(280, Math.floor((W * H) / 6000)));
                 for (let i = 0; i < count; i++) {
                     const size = 0.3 + Math.random() * 1.6;
@@ -350,7 +379,6 @@
                 }
             }
 
-            // ---- Shooting Star (Premium Intro) ----
             function shootStar(callback) {
                 const overlay = document.getElementById('shooting-star-overlay');
                 const startX = Math.random() * W * 0.3;
@@ -377,7 +405,6 @@
 
                     ctx.save();
 
-                    // Tail
                     for (let i = 0; i < tailLength; i++) {
                         const t = i / tailLength;
                         const px = cx - (endX - startX) * t * 0.012;
@@ -392,7 +419,6 @@
                         ctx.fill();
                     }
 
-                    // Head
                     ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
                     ctx.shadowBlur = 80;
                     ctx.beginPath();
@@ -422,25 +448,21 @@
                 requestAnimationFrame(animateShoot);
             }
 
-            // ---- Draw Glowing Text Logo (Split Fonts) ----
             function drawGlowingText() {
                 const scale = Math.min(W, H) / 900;
                 const fontSize = Math.max(80, Math.min(280, 200 * scale));
 
-                // Gradient: dark violet → deep crimson
                 const grad = ctx.createLinearGradient(W * 0.2, 0, W * 0.8, 0);
-                grad.addColorStop(0, '#1a0033'); // dark violet
+                grad.addColorStop(0, '#1a0033');
                 grad.addColorStop(0.4, '#3d0a5e');
-                grad.addColorStop(0.7, '#660011'); // deep crimson
-                grad.addColorStop(1, '#8b0015'); // blood crimson
+                grad.addColorStop(0.7, '#660011');
+                grad.addColorStop(1, '#8b0015');
 
-                // Center positioning
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
                 const centerX = W / 2;
                 const centerY = H / 2 - 8 * scale;
 
-                // Measure widths to align perfectly
                 const sFont = `${fontSize}px 'Alex Brush', cursive`;
                 const restFont = `${fontSize}px 'Parisienne', cursive`;
 
@@ -451,7 +473,6 @@
                 const totalWidth = sWidth + restWidth;
                 const startX = centerX - totalWidth / 2;
 
-                // ---- Draw 'S' (Alex Brush) ----
                 ctx.font = sFont;
                 ctx.shadowColor = '#cc0033';
                 ctx.shadowBlur = 90;
@@ -468,7 +489,6 @@
                 ctx.fillText('S', startX, centerY);
                 ctx.globalAlpha = 1;
 
-                // ---- Draw 'txrfallz' (Parisienne) ----
                 ctx.font = restFont;
                 ctx.shadowColor = '#cc0033';
                 ctx.shadowBlur = 90;
@@ -485,7 +505,6 @@
                 ctx.fillText('txrfallz', startX + sWidth, centerY);
                 ctx.globalAlpha = 1;
 
-                // Secondary violet glow for both
                 ctx.shadowBlur = 70;
                 ctx.shadowColor = 'rgba(60, 10, 100, 0.3)';
                 ctx.fillStyle = grad;
@@ -496,16 +515,13 @@
                 ctx.shadowBlur = 0;
             }
 
-            // ---- Background Nebula ----
             function drawNebula() {
-                // Violet void glow
                 const grad1 = ctx.createRadialGradient(W * 0.2, H * 0.3, 0, W * 0.2, H * 0.3, W * 0.5);
                 grad1.addColorStop(0, 'rgba(40, 0, 80, 0.04)');
                 grad1.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.fillStyle = grad1;
                 ctx.fillRect(0, 0, W, H);
 
-                // Crimson blood glow
                 const grad2 = ctx.createRadialGradient(W * 0.8, H * 0.7, 0, W * 0.8, H * 0.7, W * 0.4);
                 grad2.addColorStop(0, 'rgba(139, 0, 21, 0.03)');
                 grad2.addColorStop(1, 'rgba(0, 0, 0, 0)');
@@ -513,18 +529,14 @@
                 ctx.fillRect(0, 0, W, H);
             }
 
-            // ---- Main Draw Loop ----
             function draw() {
                 time += 0.01;
 
-                // Deep void background
                 ctx.fillStyle = '#010002';
                 ctx.fillRect(0, 0, W, H);
 
-                // Nebula layers
                 drawNebula();
 
-                // ---- Draw Background Stars ----
                 for (const star of bgStars) {
                     const pulse = 0.7 + 0.3 * Math.sin(time * star.pulseSpeed + star.pulseOffset);
                     const currentR = star.baseR * (0.8 + 0.4 * pulse);
@@ -545,10 +557,8 @@
                     ctx.fill();
                 }
 
-                // ---- Draw Glowing Text Logo ----
                 drawGlowingText();
 
-                // ---- Click Ripple ----
                 if (clickWave.active) {
                     clickWave.radius += 6;
                     clickWave.alpha *= 0.965;
@@ -577,7 +587,6 @@
                 requestAnimationFrame(draw);
             }
 
-            // ---- Interactivity ----
             canvas.addEventListener('mousemove', (e) => {
                 const rect = canvas.getBoundingClientRect();
                 mouse.x = e.clientX - rect.left;
@@ -600,7 +609,6 @@
                 clickWave.alpha = 1;
             });
 
-            // ---- Touch Support ----
             canvas.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 const touch = e.touches[0];
@@ -627,7 +635,6 @@
                 mouse.y = -9999;
             });
 
-            // ---- Hamburger ----
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
             if (hamburger && navLinks) {
@@ -641,7 +648,6 @@
                 });
             }
 
-            // ---- Init ----
             resize();
             setTimeout(() => {
                 shootStar(() => {
@@ -650,7 +656,6 @@
             }, 300);
             draw();
 
-            // Resize handler
             let resizeTimeout;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimeout);

@@ -4,18 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Discord · Stxrfallz Void</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-
         body {
             font-family: 'Outfit', sans-serif;
             background: #010002;
@@ -26,8 +21,6 @@
             align-items: center;
             padding: 24px;
         }
-
-        /* Stars background */
         #stars {
             position: fixed;
             top: 0; left: 0;
@@ -48,32 +41,18 @@
             0% { opacity: 0.1; transform: scale(1); }
             100% { opacity: 0.6; transform: scale(1.5); }
         }
-
-        /* Glow Rings */
         .glow-ring {
             position: fixed;
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
         }
-        .ring-violet {
-            top: -10%; left: -10%;
-            width: 60%; height: 60%;
-            background: radial-gradient(circle, rgba(60,10,100,0.08) 0%, transparent 70%);
-            animation: float 20s ease-in-out infinite alternate;
-        }
-        .ring-crimson {
-            bottom: -10%; right: -10%;
-            width: 50%; height: 50%;
-            background: radial-gradient(circle, rgba(139,0,21,0.06) 0%, transparent 70%);
-            animation: float 25s ease-in-out infinite alternate-reverse;
-        }
+        .ring-violet { top:-10%; left:-10%; width:60%; height:60%; background: radial-gradient(circle, rgba(60,10,100,0.08) 0%, transparent 70%); animation: float 20s ease-in-out infinite alternate; }
+        .ring-crimson { bottom:-10%; right:-10%; width:50%; height:50%; background: radial-gradient(circle, rgba(139,0,21,0.06) 0%, transparent 70%); animation: float 25s ease-in-out infinite alternate-reverse; }
         @keyframes float {
             0% { transform: translate(0,0) scale(1); }
             100% { transform: translate(30px,20px) scale(1.2); }
         }
-
-        /* Card */
         .card {
             position: relative;
             z-index: 10;
@@ -85,16 +64,8 @@
             border-radius: 32px;
             padding: 40px 36px;
             box-shadow: 0 30px 80px rgba(0,0,0,0.8);
-            transition: all 0.4s ease;
         }
-        .card:hover {
-            border-color: rgba(204,0,51,0.15);
-        }
-
-        /* Back link */
-        .nav-back {
-            margin-bottom: 24px;
-        }
+        .nav-back { margin-bottom: 24px; }
         .nav-back a {
             color: rgba(106,90,133,0.5);
             font-size: 0.7rem;
@@ -107,8 +78,6 @@
             gap: 8px;
         }
         .nav-back a:hover { color: #cc0033; }
-
-        /* Title */
         .title {
             font-family: 'Alex Brush', cursive;
             font-size: clamp(2.5rem, 6vw, 4rem);
@@ -126,16 +95,12 @@
             letter-spacing: 2px;
             margin-bottom: 24px;
         }
-
-        /* Divider */
         .divider {
             width: 60px;
             height: 1px;
             background: linear-gradient(90deg, rgba(204,0,51,0.2), rgba(204,0,51,0.6));
             margin: 20px 0 28px;
         }
-
-        /* Info blocks */
         .info-item {
             display: flex;
             align-items: flex-start;
@@ -147,40 +112,12 @@
             border: 1px solid rgba(255,255,255,0.03);
             transition: all 0.3s ease;
         }
-        .info-item:hover {
-            background: rgba(204,0,51,0.03);
-            border-color: rgba(204,0,51,0.05);
-        }
-        .info-item .icon {
-            font-size: 1.8rem;
-            color: rgba(204,0,51,0.4);
-            min-width: 40px;
-            text-align: center;
-        }
-        .info-item .content h4 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            font-size: 1.1rem;
-            color: rgba(240,236,255,0.8);
-            margin-bottom: 4px;
-        }
-        .info-item .content p {
-            font-weight: 300;
-            font-size: 0.9rem;
-            color: rgba(106,90,133,0.6);
-        }
-        .info-item .content a {
-            color: #cc0033;
-            text-decoration: none;
-            font-weight: 400;
-            transition: color 0.3s ease;
-        }
-        .info-item .content a:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        /* Join button */
+        .info-item:hover { background: rgba(204,0,51,0.03); border-color: rgba(204,0,51,0.05); }
+        .info-item .icon { font-size: 1.8rem; color: rgba(204,0,51,0.4); min-width: 40px; text-align: center; }
+        .info-item .content h4 { font-family: 'Playfair Display', serif; font-weight: 400; font-size: 1.1rem; color: rgba(240,236,255,0.8); margin-bottom: 4px; }
+        .info-item .content p { font-weight: 300; font-size: 0.9rem; color: rgba(106,90,133,0.6); }
+        .info-item .content a { color: #cc0033; text-decoration: none; font-weight: 400; transition: color 0.3s ease; }
+        .info-item .content a:hover { color: #ffffff; text-decoration: underline; }
         .join-btn {
             display: inline-block;
             margin-top: 12px;
@@ -202,8 +139,6 @@
             box-shadow: 0 0 50px rgba(204,0,51,0.15);
             background: linear-gradient(135deg, #3d0a5e 0%, #8b0015 100%);
         }
-
-        /* Responsive */
         @media (max-width: 640px) {
             .card { padding: 28px 20px; }
             .info-item { flex-direction: column; align-items: center; text-align: center; }
@@ -212,7 +147,6 @@
     </style>
 </head>
 <body>
-
     <div id="stars"></div>
     <div class="glow-ring ring-violet"></div>
     <div class="glow-ring ring-crimson"></div>
@@ -221,13 +155,9 @@
         <div class="nav-back">
             <a href="socials.html"><i class="fas fa-arrow-left"></i> back to alessandra</a>
         </div>
-
         <div class="title">Discord</div>
         <div class="subtitle">— the voice of the void —</div>
-
         <div class="divider"></div>
-
-        <!-- Server -->
         <div class="info-item">
             <div class="icon"><i class="fab fa-discord"></i></div>
             <div class="content">
@@ -236,8 +166,6 @@
                 <a href="YOUR_DISCORD_INVITE_LINK" target="_blank">discord.gg/yourlink</a>
             </div>
         </div>
-
-        <!-- Bot -->
         <div class="info-item">
             <div class="icon"><i class="fas fa-robot"></i></div>
             <div class="content">
@@ -246,8 +174,6 @@
                 <p><a href="YOUR_BOT_INVITE_LINK" target="_blank">Invite the bot</a> · <a href="YOUR_BOT_DASHBOARD" target="_blank">Dashboard</a></p>
             </div>
         </div>
-
-        <!-- App -->
         <div class="info-item">
             <div class="icon"><i class="fas fa-mobile-alt"></i></div>
             <div class="content">
@@ -256,14 +182,10 @@
                 <p><a href="YOUR_APP_STORE_LINK" target="_blank">Download</a> · <a href="YOUR_APP_WEBSITE" target="_blank">Learn more</a></p>
             </div>
         </div>
-
-        <!-- Join call -->
         <div style="text-align: center; margin-top: 12px;">
             <a href="YOUR_DISCORD_INVITE_LINK" target="_blank" class="join-btn"><i class="fab fa-discord" style="margin-right: 8px;"></i> Enter the Void</a>
         </div>
-
     </div>
-
     <script>
         (function() {
             const container = document.getElementById('stars');
